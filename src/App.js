@@ -1,13 +1,25 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import Header from './common';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import EmpListing from './EmpListing';
+import EmpCreate from './EmpCreate';
+import EmpDetail from './EmpDetail';
+import EmpEdit from './EmpEdit';
 
 function App ()
 {
   return (
-    <>
-      <Header />
-    </>
+    <div className="App">
+      <h1>React JS CRUD Operations</h1>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={ <EmpListing /> }></Route>
+          <Route path='/employee/create' element={ <EmpCreate /> }></Route>
+          <Route path='/employee/detail/:empId' element={ <EmpDetail /> }></Route>
+          <Route path='/employee/edit/:empId' element={ <EmpEdit /> }></Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

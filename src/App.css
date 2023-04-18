@@ -7,6 +7,18 @@
   pointer-events: none;
 }
 
+.btn {
+  margin: 1px;
+}
+
+.divbtn {
+  float: left;
+}
+
+.empForm {
+  margin-left: 15px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

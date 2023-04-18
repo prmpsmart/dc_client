@@ -1,0 +1,31 @@
+{
+  "employee": [
+    {
+      "name": "john",
+      "email": "jh@in.com",
+      "phone": "08168534477",
+      "id": 1
+    },
+    {
+      "name": "Miracle Apata",
+      "email": "rockymiracy@gmail.com",
+      "phone": "08085200646",
+      "active": true,
+      "id": 2
+    },
+    {
+      "name": "Joshua",
+      "email": "john@gmail.com",
+      "phone": "09047284619",
+      "active": true,
+      "id": 3
+    },
+    {
+      "name": "woio3ioi4",
+      "email": "oiowiewo@has.assao",
+      "phone": "0923230923",
+      "active": true,
+      "id": 4
+    }
+  ]
+}
