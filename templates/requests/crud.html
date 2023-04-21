@@ -19,7 +19,7 @@
 <div class="accordion mt-3 mb-3 " id="accordionP">
     <div class="accordion-item">
         <h2 class="accordion-header" id="heading2">
-            <button class="accordion-button collapsed bg-success text-light" type="button" data-bs-toggle="collapse"
+            <button class="accordion-button collapsed bg-primary text-light" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapse2"
                 aria-expanded="{% if 'Select' in action %}true{% else %}false{% endif %}"
                 aria-controls="collapse2">
@@ -76,25 +76,24 @@
                             <b>Table :</b>
                         </label>
                         <input  class="form-control" name="table" {% if 'Select' in action %}
-                            value="{{ table }}" {% endif %} placeholder="Enter table name." required  />
+                            value="{{ table }}" {% endif %} placeholder="Enter table name." required />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
                             <b>Columns :</b>
                             To select all columns input *
                         </label>
-                        <textarea class="form-control" name="columns" {% if 'Select' in action %}
+                        <textarea style="height: 150px; font-size: 20px; font-weight: bold;" class="form-control" name="columns" {% if 'Select' in action %}
                             value="{{ columns }}" {% endif %} required >*</textarea>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">
-                            <strong class="text-danger">*</strong>
-                            <b>Columns :</b>
-                            To select all columns input *
+                            <b>Where :</b>
+                            Input a valid <b class="text-danger">SQL WHERE</b> statement excluding the <b class="text-danger">WHERE</b>.
                         </label>
-                        <textarea class="form-control" name="table" {% if 'Select' in action %}
-                            value="{{ table }}" {% endif %} >*</textarea>
+                        <textarea style="height: 150px; font-size: 20px; font-weight: bold;" class="form-control" name="where" {% if 'Select' in action %}
+                            value="{{ where }}" {% endif %} >column1 = "value1" AND column2 > 45</textarea>
                     </div>
                     <div class="col-12 mt-3">
                         <button class="btn btn-primary" type="submit">Create database</button>
@@ -107,24 +106,24 @@
         <h2 class="accordion-header h2" id="heading5">
             <button class="accordion-button collapsed bg-danger text-light" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapse5"
-                aria-expanded="{% if 'DropTable' in action %}true{% else %}false{% endif %}"
+                aria-expanded="{% if 'Delete' in action %}true{% else %}false{% endif %}"
                 aria-controls="collapse5">
-                <h2>Drop Table</h2>
+                <h2>Delete</h2>
             </button>
         </h2>
-        <div id="collapse5" class="accordion-collapse collapse {% if 'DropTable' in action %} show {% endif %}"
+        <div id="collapse5" class="accordion-collapse collapse {% if 'Delete' in action %} show {% endif %}"
             aria-labelledby="heading5" data-bs-parent="#accordionP">
             <div class="accordion-body">
-                <form class="row g-4" method='post' id="DropTable" onsubmit="return validate_form(this);">
+                <form class="row g-4" method='post' id="Delete" onsubmit="return validate_form(this);">
                     {% csrf_token %}
-                    <input hidden  value="DropTable" name='action'>
+                    <input hidden  value="Delete" name='action'>
                     <div class="col-md-4">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
                             <b>Database :</b>
                         </label>
-                        <input  class="form-control" name="database" {% if 'DropTable' in action %}
-                            value="{{ database }}" {% endif %} placeholder="Enter database name." required onchange="toggle_password2('DropTable', this);" onfocus="this.onchange();" />
+                        <input  class="form-control" name="database" {% if 'Delete' in action %}
+                            value="{{ database }}" {% endif %} placeholder="Enter database name." required onchange="toggle_password2('Delete', this);" onfocus="this.onchange();" />
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">
@@ -132,9 +131,9 @@
                             <b>Password :</b>
                             <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_password_img"
                                 class="btn p-0 m-0" style="height: 20px; width: 40px;"
-                                onclick="toggle_password('DropTable');" />
+                                onclick="toggle_password('Delete');" />
                         </label>
-                        <input type="password" class="form-control" name="password" {% if 'DropTable' in action %}
+                        <input type="password" class="form-control" name="password" {% if 'Delete' in action %}
                             value="{{ password }}" {% endif %} placeholder="Enter folder password." required
                             autocomplete />
                     </div>
@@ -142,27 +141,103 @@
                         <label class="form-label">
                             <b>Database Folder :</b>
                         </label>
-                        <input  class="form-control" name="folder" {% if 'DropTable' in action %}
-                            value="{{ folder }}" {% endif %} placeholder="Enter database folder." onchange="toggle_folderPassword('DropTable', this);" onfocus="this.onchange();" />
+                        <input  class="form-control" name="folder" {% if 'Delete' in action %}
+                            value="{{ folder }}" {% endif %} placeholder="Enter database folder." onchange="toggle_folderPassword('Delete', this);" onfocus="this.onchange();" />
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">
                             <b>Database Folder Password :</b>
                             <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_folderPassword_img"
                                 class="btn p-0 m-0" style="height: 20px; width: 40px;"
-                                onclick="toggle_password('DropTable', true);" />
+                                onclick="toggle_password('Delete', true);" />
                         </label>
-                        <input type="password" class="form-control" name="folderPassword" {% if 'DropTable' in action %}
+                        <input type="password" class="form-control" name="folderPassword" {% if 'Delete' in action %}
                             value="{{ folderPassword }}" {% endif %} placeholder="Enter database folder password."
                             autocomplete />
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
-                            <b>Name :</b>
+                            <b>Table :</b>
                         </label>
-                        <input  class="form-control" name="name" {% if 'DropTable' in action %}
-                            value="{{ name }}" {% endif %} placeholder="Enter table name." required  />
+                        <input  class="form-control" name="table" {% if 'Delete' in action %}
+                            value="{{ table }}" {% endif %} placeholder="Enter table name." required  />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Where :</b>
+                            Input a valid <b class="text-danger">SQL WHERE</b> statement excluding the <b class="text-danger">WHERE</b>.
+                        </label>
+                        <textarea name="where" {% if 'Select' in action %}
+                            value="{{ where }}" {% endif %} >column1 = "value1" AND column2 > 45</textarea>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Drop database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading5">
+            <button class="accordion-button collapsed bg-info text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse5"
+                aria-expanded="{% if 'SQL' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse5">
+                <h2>SQL</h2>
+            </button>
+        </h2>
+        <div id="collapse5" class="accordion-collapse collapse {% if 'SQL' in action %} show {% endif %}"
+            aria-labelledby="heading5" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="SQL" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden  value="SQL" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Database :</b>
+                        </label>
+                        <input  class="form-control" name="database" {% if 'SQL' in action %}
+                            value="{{ database }}" {% endif %} placeholder="Enter database name." required onchange="toggle_password2('SQL', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('SQL');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'SQL' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input  class="form-control" name="folder" {% if 'SQL' in action %}
+                            value="{{ folder }}" {% endif %} placeholder="Enter database folder." onchange="toggle_folderPassword('SQL', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('SQL', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'SQL' in action %}
+                            value="{{ folderPassword }}" {% endif %} placeholder="Enter database folder password."
+                            autocomplete />
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">
+                            <b>Statement :</b>
+                            Input a valid <b class="text-danger">SQL Statement</b>.
+                        </label>
+                        <textarea style="height: 150px; font-size: 20px; font-weight: bold;" class="form-control" name="where" {% if 'Select' in action %}
+                            value="{{ where }}" {% endif %} >column1 = "value1" AND column2 > 45</textarea>
                     </div>
                     <div class="col-12 mt-3">
                         <button class="btn btn-primary" type="submit">Drop database</button>

@@ -19,8 +19,7 @@
 <div class="accordion mt-3 mb-3 " id="accordionP">
     <div class="accordion-item">
         <h2 class="accordion-header" id="heading1">
-            <button class="accordion-button collapsed bg-primary text-light" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapse1"
+            <button class="accordion-button collapsed bg-primary text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1"
                 aria-expanded="{% if 'FolderExists' in action or not action %}false{% else %}false{% endif %}"
                 aria-controls="collapse1">
                 <h2>Folder Exists</h2>
@@ -32,14 +31,14 @@
             <div class="accordion-body">
                 <form class="row g-4" method='post' id="FolderExists" onsubmit="return validate_form(this);">
                     {% csrf_token %}
-                    <input hidden value="FolderExists" name="action">
+                    <input hidden  value="FolderExists" name="action">
                     <div class="col-md-4">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
                             <b>Name :</b>
                         </label>
-                        <input class="form-control" name="name" {% if 'FolderExists' in action %} value="{{ name }}" {%
-                            endif %} placeholder="Enter folder name." required />
+                        <input  class="form-control" name="name" {% if 'FolderExists' in action %}
+                            value="{{ name }}" {% endif %} placeholder="Enter folder name." required />
                     </div>
                     <div class="col-12">
                         <button class="btn btn-primary" type="submit">Check folder</button>
@@ -62,15 +61,15 @@
             <div class="accordion-body">
                 <form class="row g-4" method='post' id="CreateFolder" onsubmit="return validate_form(this);">
                     {% csrf_token %}
-                    <input hidden value="CreateFolder" name='action'>
+                    <input hidden  value="CreateFolder" name='action'>
                     <div class="col-md-4">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
                             <b>Name :</b>
                         </label>
-                        <input class="form-control" name="name" {% if 'CreateFolder' in action %} value="{{ name }}" {%
-                            endif %} placeholder="Enter folder name." required
-                            onchange="toggle_password2('CreateFolder', this);" onfocus="this.onchange();" />
+                        <input  class="form-control" name="name" {% if 'CreateFolder' in action %}
+                            value="{{ name }}" {% endif %} placeholder="Enter folder name." required 
+                            onchange="toggle_password2('CreateFolder', this);" onfocus="this.onchange();"/>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">
@@ -104,15 +103,15 @@
             <div class="accordion-body">
                 <form class="row g-4" method='post' id="GetFolder" onsubmit="return validate_form(this);">
                     {% csrf_token %}
-                    <input hidden value="GetFolder" name='action'>
+                    <input hidden  value="GetFolder" name='action'>
                     <div class="col-md-4">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
                             <b>Name :</b>
                         </label>
-                        <input class="form-control" name="name" {% if 'GetFolder' in action %} value="{{ name }}" {%
-                            endif %} placeholder="Enter folder name." required
-                            onchange="toggle_password2('GetFolder', this);" onfocus="this.onchange();" />
+                        <input  class="form-control" name="name" {% if 'GetFolder' in action %}
+                            value="{{ name }}" {% endif %} placeholder="Enter folder name." required 
+                            onchange="toggle_password2('GetFolder', this);" onfocus="this.onchange();"/>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">
@@ -146,15 +145,15 @@
             <div class="accordion-body">
                 <form class="row g-4" method='post' id="RenameFolder" onsubmit="return validate_form(this);">
                     {% csrf_token %}
-                    <input hidden value="RenameFolder" name='action'>
+                    <input hidden  value="RenameFolder" name='action'>
                     <div class="col-md-4">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
                             <b>Name :</b>
                         </label>
-                        <input class="form-control" name="name" {% if 'RenameFolder' in action %} value="{{ name }}" {%
-                            endif %} placeholder="Enter folder name." required
-                            onchange="toggle_password2('RenameFolder', this);" onfocus="this.onchange();" />
+                        <input  class="form-control" name="name" {% if 'RenameFolder' in action %}
+                            value="{{ name }}" {% endif %} placeholder="Enter folder name." required 
+                            onchange="toggle_password2('RenameFolder', this);" onfocus="this.onchange();"/>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">
@@ -173,7 +172,7 @@
                             <strong class="text-danger">*</strong>
                             <b>New name :</b>
                         </label>
-                        <input class="form-control" name="newName" {% if 'RenameFolder' in action %}
+                        <input  class="form-control" name="newName" {% if 'RenameFolder' in action %}
                             value="{{ newName }}" {% endif %} placeholder="Enter new name for folder." required />
                     </div>
                     <div class="col-12 mt-3">
@@ -197,15 +196,15 @@
             <div class="accordion-body">
                 <form class="row g-4" method='post' id="DeleteFolder" onsubmit="return validate_form(this);">
                     {% csrf_token %}
-                    <input hidden value="DeleteFolder" name='action'>
+                    <input hidden  value="DeleteFolder" name='action'>
                     <div class="col-md-4">
                         <label class="form-label">
                             <strong class="text-danger">*</strong>
                             <b>Name :</b>
                         </label>
-                        <input class="form-control" name="name" {% if 'DeleteFolder' in action %} value="{{ name }}" {%
-                            endif %} placeholder="Enter folder name." required
-                            onchange="toggle_password2('DeleteFolder', this);" onfocus="this.onchange();" />
+                        <input  class="form-control" name="name" {% if 'DeleteFolder' in action %}
+                            value="{{ name }}" {% endif %} placeholder="Enter folder name." required 
+                            onchange="toggle_password2('DeleteFolder', this);" onfocus="this.onchange();"/>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">

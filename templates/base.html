@@ -37,32 +37,28 @@
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/"><b>Database Server</b></a>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
-                <a class="nav-link {% if 'folders' in path %} text-primary {% endif %}"
-                    href="{% url 'folders' %}">
+                <a class="nav-link {% if 'folders' in path %} text-primary {% endif %}" href="{% url 'folders' %}">
                     <b>Folders</b>
                 </a>
             </div>
         </div>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
-                <a class="nav-link {% if 'databases' in path %} text-primary {% endif %}"
-                    href="{% url 'databases' %}">
+                <a class="nav-link {% if 'databases' in path %} text-primary {% endif %}" href="{% url 'databases' %}">
                     <b>Databases</b>
                 </a>
             </div>
         </div>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
-                <a class="nav-link {% if 'tables' in path %} text-primary {% endif %}"
-                    href="{% url 'tables' %}">
+                <a class="nav-link {% if 'tables' in path %} text-primary {% endif %}" href="{% url 'tables' %}">
                     <b>Tables</b>
                 </a>
             </div>
         </div>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
-                <a class="nav-link {% if 'crud' in path %} text-primary {% endif %} px-3"
-                    href="{% url 'crud' %}">
+                <a class="nav-link {% if 'crud' in path %} text-primary {% endif %} px-3" href="{% url 'crud' %}">
                     <b>CRUD</b>
                 </a>
             </div>
