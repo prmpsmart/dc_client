@@ -1,0 +1,328 @@
+{% extends 'requests/base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+{% if db_error %}
+
+<div class="card bg-danger mt-3 text-center">
+    <div class="card-body p-1">
+        <h4 class="text-white">
+            Database Server was down at the time of making a <code class="text-light">{{action}}</code> request.
+        </h4>
+    </div>
+</div>
+
+{% endif %}
+
+<div class="accordion mt-3 mb-3 " id="accordionP">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading1">
+            <button class="accordion-button collapsed bg-primary text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse1"
+                aria-expanded="{% if 'DatabaseExists' in action or not action %}false{% else %}false{% endif %}"
+                aria-controls="collapse1">
+                <h2>Database Exists</h2>
+            </button>
+        </h2>
+        <div id="collapse1"
+            class="accordion-collapse collapse {% if 'DatabaseExists' in action or not action %} show {% endif %}"
+            aria-labelledby="heading1" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="DatabaseExists" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="DatabaseExists" name="action">
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'DatabaseExists' in action %} value="{{ name }}"
+                            {% endif %} placeholder="Enter database name." required />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input class="form-control" name="folder" {% if 'DatabaseExists' in action %}
+                            value="{{ folder }}" {% endif %} placeholder="Enter database folder."
+                            onchange="toggle_folderPassword('DatabaseExists', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DatabaseExists_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('DatabaseExists', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'DatabaseExists' in
+                            action %} value="{{ folderPassword }}" {% endif %}
+                            placeholder="Enter database folder password." autocomplete />
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Check database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading2">
+            <button class="accordion-button collapsed bg-success text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse2"
+                aria-expanded="{% if 'CreateDatabase' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse2">
+                <h2>Create Database</h2>
+            </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse {% if 'CreateDatabase' in action %} show {% endif %}"
+            aria-labelledby="heading2" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="CreateDatabase" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="CreateDatabase" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'CreateDatabase' in action %} value="{{ name }}"
+                            {% endif %} placeholder="Enter database name." required
+                            onchange="toggle_password2('CreateDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="CreateDatabase_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('CreateDatabase');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'CreateDatabase' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input class="form-control" name="folder" {% if 'CreateDatabase' in action %}
+                            value="{{ folder }}" {% endif %} placeholder="Enter database folder."
+                            onchange="toggle_folderPassword('CreateDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="CreateDatabase_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('CreateDatabase', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'CreateDatabase' in
+                            action %} value="{{ folderPassword }}" {% endif %}
+                            placeholder="Enter database folder password." autocomplete />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Create database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading3">
+            <button class="accordion-button collapsed bg-info text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse3"
+                aria-expanded="{% if 'GetDatabase' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse3">
+                <h2>Get Database</h2>
+            </button>
+        </h2>
+        <div id="collapse3" class="accordion-collapse collapse {% if 'GetDatabase' in action %} show {% endif %}"
+            aria-labelledby="heading3" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="GetDatabase" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="GetDatabase" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'GetDatabase' in action %} value="{{ name }}" {%
+                            endif %} placeholder="Enter database name." required
+                            onchange="toggle_password2('GetDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="GetDatabase_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('GetDatabase');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'GetDatabase' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input class="form-control" name="folder" {% if 'GetDatabase' in action %} value="{{ folder }}"
+                            {% endif %} placeholder="Enter database folder."
+                            onchange="toggle_folderPassword('GetDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="GetDatabase_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('GetDatabase', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'GetDatabase' in action
+                            %} value="{{ folderPassword }}" {% endif %} placeholder="Enter database folder password."
+                            autocomplete />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Get folder details</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading4">
+            <button class="accordion-button collapsed bg-warning text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse4"
+                aria-expanded="{% if 'RenameDatabase' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse4">
+                <h2>Rename Database</h2>
+            </button>
+        </h2>
+        <div id="collapse4" class="accordion-collapse collapse {% if 'RenameDatabase' in action %} show {% endif %}"
+            aria-labelledby="heading4" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="RenameDatabase" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="RenameDatabase" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'RenameDatabase' in action %} value="{{ name }}"
+                            {% endif %} placeholder="Enter database name." required
+                            onchange="toggle_password2('RenameDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="RenameDatabase_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('RenameDatabase');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'RenameDatabase' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>New name :</b>
+                        </label>
+                        <input class="form-control" name="newName" {% if 'RenameDatabase' in action %}
+                            value="{{ newName }}" {% endif %} placeholder="Enter new name for database." required />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input class="form-control" name="folder" {% if 'RenameDatabase' in action %}
+                            value="{{ folder }}" {% endif %} placeholder="Enter database folder."
+                            onchange="toggle_folderPassword('RenameDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="RenameDatabase_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('RenameDatabase', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'RenameDatabase' in
+                            action %} value="{{ folderPassword }}" {% endif %}
+                            placeholder="Enter database folder password." autocomplete />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Rename database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading5">
+            <button class="accordion-button collapsed bg-danger text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse5"
+                aria-expanded="{% if 'DropDatabase' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse5">
+                <h2>Drop Database</h2>
+            </button>
+        </h2>
+        <div id="collapse5" class="accordion-collapse collapse {% if 'DropDatabase' in action %} show {% endif %}"
+            aria-labelledby="heading5" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="DropDatabase" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="DropDatabase" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'DropDatabase' in action %} value="{{ name }}" {%
+                            endif %} placeholder="Enter database name." required
+                            onchange="toggle_password2('DropDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('DropDatabase');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'DropDatabase' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input class="form-control" name="folder" {% if 'DropDatabase' in action %} value="{{ folder }}"
+                            {% endif %} placeholder="Enter database folder."
+                            onchange="toggle_folderPassword('DropDatabase', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('DropDatabase', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'DropDatabase' in action
+                            %} value="{{ folderPassword }}" {% endif %} placeholder="Enter database folder password."
+                            autocomplete />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Drop database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}

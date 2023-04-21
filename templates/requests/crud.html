@@ -1,0 +1,176 @@
+{% extends 'requests/base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+{% if db_error %}
+
+<div class="card bg-danger mt-3 text-center">
+    <div class="card-body p-1">
+        <h4 class="text-white">
+            Database Server was down at the time of making a <code class="text-light">{{action}}</code> request.
+        </h4>
+    </div>
+</div>
+
+{% endif %}
+
+<div class="accordion mt-3 mb-3 " id="accordionP">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading2">
+            <button class="accordion-button collapsed bg-success text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse2"
+                aria-expanded="{% if 'Select' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse2">
+                <h2>Select</h2>
+            </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse {% if 'Select' in action or not action %} show {% endif %}"
+            aria-labelledby="heading2" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="Select" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden  value="Select" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Database :</b>
+                        </label>
+                        <input  class="form-control" name="database" {% if 'Select' in action %}
+                            value="{{ database }}" {% endif %} placeholder="Enter database name." required onchange="toggle_password2('Select', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="CreateDatabase_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('Select');"/>
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'Select' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input  class="form-control" name="folder" {% if 'Select' in action %}
+                            value="{{ folder }}" {% endif %} placeholder="Enter database folder." onchange="toggle_folderPassword('Select', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="CreateDatabase_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('Select', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'Select' in action %}
+                            value="{{ folderPassword }}" {% endif %} placeholder="Enter database folder password."
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Table :</b>
+                        </label>
+                        <input  class="form-control" name="table" {% if 'Select' in action %}
+                            value="{{ table }}" {% endif %} placeholder="Enter table name." required  />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Columns :</b>
+                            To select all columns input *
+                        </label>
+                        <textarea class="form-control" name="columns" {% if 'Select' in action %}
+                            value="{{ columns }}" {% endif %} required >*</textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Columns :</b>
+                            To select all columns input *
+                        </label>
+                        <textarea class="form-control" name="table" {% if 'Select' in action %}
+                            value="{{ table }}" {% endif %} >*</textarea>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Create database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading5">
+            <button class="accordion-button collapsed bg-danger text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse5"
+                aria-expanded="{% if 'DropTable' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse5">
+                <h2>Drop Table</h2>
+            </button>
+        </h2>
+        <div id="collapse5" class="accordion-collapse collapse {% if 'DropTable' in action %} show {% endif %}"
+            aria-labelledby="heading5" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="DropTable" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden  value="DropTable" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Database :</b>
+                        </label>
+                        <input  class="form-control" name="database" {% if 'DropTable' in action %}
+                            value="{{ database }}" {% endif %} placeholder="Enter database name." required onchange="toggle_password2('DropTable', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('DropTable');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'DropTable' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder :</b>
+                        </label>
+                        <input  class="form-control" name="folder" {% if 'DropTable' in action %}
+                            value="{{ folder }}" {% endif %} placeholder="Enter database folder." onchange="toggle_folderPassword('DropTable', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <b>Database Folder Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DropDatabase_folderPassword_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('DropTable', true);" />
+                        </label>
+                        <input type="password" class="form-control" name="folderPassword" {% if 'DropTable' in action %}
+                            value="{{ folderPassword }}" {% endif %} placeholder="Enter database folder password."
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input  class="form-control" name="name" {% if 'DropTable' in action %}
+                            value="{{ name }}" {% endif %} placeholder="Enter table name." required  />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Drop database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}

@@ -1,0 +1,231 @@
+{% extends 'requests/base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+{% if db_error %}
+
+<div class="card bg-danger mt-3 text-center">
+    <div class="card-body p-1">
+        <h4 class="text-white">
+            Database Server was down at the time of making a <code class="text-light">{{action}}</code> request.
+        </h4>
+    </div>
+</div>
+
+{% endif %}
+
+<div class="accordion mt-3 mb-3 " id="accordionP">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading1">
+            <button class="accordion-button collapsed bg-primary text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse1"
+                aria-expanded="{% if 'FolderExists' in action or not action %}false{% else %}false{% endif %}"
+                aria-controls="collapse1">
+                <h2>Folder Exists</h2>
+            </button>
+        </h2>
+        <div id="collapse1"
+            class="accordion-collapse collapse {% if 'FolderExists' in action or not action %} show {% endif %}"
+            aria-labelledby="heading1" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="FolderExists" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="FolderExists" name="action">
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'FolderExists' in action %} value="{{ name }}" {%
+                            endif %} placeholder="Enter folder name." required />
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Check folder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading2">
+            <button class="accordion-button collapsed bg-success text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse2"
+                aria-expanded="{% if 'CreateFolder' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse2">
+                <h2>Create Folder</h2>
+            </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse {% if 'CreateFolder' in action %} show {% endif %}"
+            aria-labelledby="heading2" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="CreateFolder" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="CreateFolder" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'CreateFolder' in action %} value="{{ name }}" {%
+                            endif %} placeholder="Enter folder name." required
+                            onchange="toggle_password2('CreateFolder', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password : </b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="CreateFolder_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('CreateFolder');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'CreateFolder' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Create folder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading3">
+            <button class="accordion-button collapsed bg-info text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse3" aria-expanded="{% if 'GetFolder' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse3">
+                <h2>Get Folder</h2>
+            </button>
+        </h2>
+        <div id="collapse3" class="accordion-collapse collapse {% if 'GetFolder' in action %} show {% endif %}"
+            aria-labelledby="heading3" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="GetFolder" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="GetFolder" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'GetFolder' in action %} value="{{ name }}" {%
+                            endif %} placeholder="Enter folder name." required
+                            onchange="toggle_password2('GetFolder', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="GetFolder_password_img" class="btn p-0 m-0"
+                                style="height: 20px; width: 40px;" onclick="toggle_password('GetFolder');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'GetFolder' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Get folder details</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading4">
+            <button class="accordion-button collapsed bg-warning text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse4"
+                aria-expanded="{% if 'RenameFolder' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse4">
+                <h2>Rename Folder</h2>
+            </button>
+        </h2>
+        <div id="collapse4" class="accordion-collapse collapse {% if 'RenameFolder' in action %} show {% endif %}"
+            aria-labelledby="heading4" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="RenameFolder" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="RenameFolder" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'RenameFolder' in action %} value="{{ name }}" {%
+                            endif %} placeholder="Enter folder name." required
+                            onchange="toggle_password2('RenameFolder', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="RenameFolder_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('RenameFolder');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'RenameFolder' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>New name :</b>
+                        </label>
+                        <input class="form-control" name="newName" {% if 'RenameFolder' in action %}
+                            value="{{ newName }}" {% endif %} placeholder="Enter new name for folder." required />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Rename folder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header h2" id="heading5">
+            <button class="accordion-button collapsed bg-danger text-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse5"
+                aria-expanded="{% if 'DeleteFolder' in action %}true{% else %}false{% endif %}"
+                aria-controls="collapse5">
+                <h2>Delete Folder</h2>
+            </button>
+        </h2>
+        <div id="collapse5" class="accordion-collapse collapse {% if 'DeleteFolder' in action %} show {% endif %}"
+            aria-labelledby="heading5" data-bs-parent="#accordionP">
+            <div class="accordion-body">
+                <form class="row g-4" method='post' id="DeleteFolder" onsubmit="return validate_form(this);">
+                    {% csrf_token %}
+                    <input hidden value="DeleteFolder" name='action'>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Name :</b>
+                        </label>
+                        <input class="form-control" name="name" {% if 'DeleteFolder' in action %} value="{{ name }}" {%
+                            endif %} placeholder="Enter folder name." required
+                            onchange="toggle_password2('DeleteFolder', this);" onfocus="this.onchange();" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <strong class="text-danger">*</strong>
+                            <b>Password :</b>
+                            <img src="{% static 'icons/eye-off.svg' %}" id="DeleteFolder_password_img"
+                                class="btn p-0 m-0" style="height: 20px; width: 40px;"
+                                onclick="toggle_password('DeleteFolder');" />
+                        </label>
+                        <input type="password" class="form-control" name="password" {% if 'DeleteFolder' in action %}
+                            value="{{ password }}" {% endif %} placeholder="Enter folder password." required
+                            autocomplete />
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-primary" type="submit">Delete folder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}

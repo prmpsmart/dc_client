@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block script %}
+
+<script>
+    function validate_form( form )
+    {
+        console.log( form.children.length );
+        let p = form[ 'password' ];
+        var valid = true;
+        if ( p ) valid = !p.disabled;
+        console.log( p.disabled );
+        if ( !valid )
+        {
+            let name = ( form[ 'database' ] || form[ 'name' ] ).name
+            alert( `password is not provided yet. click on ${ name }` );
+        }
+        return valid;
+    }
+    function toggle_password( form_name, folder = false )
+    {
+        let form = document.forms[ form_name ];
+        var password, password_img;
+        if ( folder )
+        {
+            password = 'folderPassword';
+            password_img = 'folderPassword_img';
+        }
+        else
+        {
+            password = 'password';
+            password_img = 'password_img';
+        }
+
+        let img_name = `${ form_name }_${ password_img }`;
+        let img = document.getElementById( img_name );
+
+        let src = "";
+
+        if ( form[ password ].type === "text" )
+        {
+            form[ password ].type = "password";
+            src = "{% static 'icons/eye.svg' %}";
+        }
+        else
+        {
+            form[ password ].type = "text";
+            src = "{% static 'icons/eye-off.svg' %}";
+        }
+        img.src = src;
+    }
+    function toggle_password2( form_name, folder )
+    {
+        let form = document.forms[ form_name ];
+        if ( folder.value === '' )
+            form[ 'password' ].disabled = true;
+        else
+            form[ 'password' ].disabled = false;
+    }
+    function toggle_folderPassword( form_name, folder )
+    {
+        let form = document.forms[ form_name ];
+        if ( folder.value === '' )
+            form[ 'folderPassword' ].disabled = true;
+        else
+            form[ 'folderPassword' ].disabled = false;
+    }
+    function disable_passwords()
+    {
+        let names = [ 'password', 'folderPassword' ];
+        names.forEach( ( name ) =>
+        {
+            let inputs = document.getElementsByName( name );
+            console.log( inputs.length );
+            inputs.forEach( ( input ) =>
+            {
+                input.disabled = true;
+            } )
+        } )
+    }
+</script>
+
+{% endblock script %}
+
+
+{% block script_end %}
+
+<script>
+    disable_passwords();
+</script>
+
+{% endblock script_end %}

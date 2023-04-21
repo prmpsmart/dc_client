@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+{% if invalid_action %}
+
+<div class="card">
+    <div class="card-header bg-danger text-light h2">
+        Request Action -> <code class="text-light">{{action}}</code> is not supported.
+    </div>
+    <div class="card-body bg-info">
+        <h3 class="card-title">
+            Request Data :
+        </h3>
+        <p class="card-text p-3">
+            <code class="h2">
+                <pre>{{ dump }}</pre>
+            </code>
+        </p>
+        <a href="{{ path }}" class="btn btn-primary">
+            Back to <b>{{ back }}</b>
+        </a>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock main %}
